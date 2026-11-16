@@ -47,7 +47,7 @@ def test_page_selection_details_failure_recovery_and_process_disappearance(caplo
 
             edge = chart.options["series"][0]["links"][0]
             user.find(ui.echart).trigger(
-                "componentClick",
+                "chart:click",
                 {
                     "componentType": "series",
                     "seriesType": "graph",
@@ -57,7 +57,6 @@ def test_page_selection_details_failure_recovery_and_process_disappearance(caplo
                     "dataIndex": 0,
                     "data": edge,
                     "dataType": "edge",
-                    "value": None,
                 },
             )
             await user.should_see("当前成功快照中的连接。")

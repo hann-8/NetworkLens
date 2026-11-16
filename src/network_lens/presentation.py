@@ -116,7 +116,11 @@ def graph_options(
 
     return {
         "animation": False,
-        "tooltip": {"trigger": "item", "renderMode": "richText", "formatter": "{b}"},
+        "tooltip": {
+            "trigger": "item",
+            "renderMode": "richText",
+            ":formatter": "params => params.data.name",
+        },
         "series": [
             {
                 "id": "connections",
@@ -124,11 +128,15 @@ def graph_options(
                 "layout": "force",
                 "roam": True,
                 "draggable": True,
+                "top": 50,
+                "bottom": 50,
+                "left": 85,
+                "right": 85,
                 # Stable IDs let ECharts retain positions; unchanged options are never resent.
                 "force": {
-                    "repulsion": 650,
-                    "gravity": 0.08,
-                    "edgeLength": 170,
+                    "repulsion": 180,
+                    "gravity": 0.2,
+                    "edgeLength": 100,
                     "layoutAnimation": False,
                 },
                 "label": {"show": True},

@@ -272,10 +272,11 @@ def create_page(monitor: Monitor) -> None:
                 render(force=True)
                 return
 
-    def click_chart(event: events.EChartPointClickEventArguments) -> None:
-        if event.data_type == "edge":
-            choose_connection(event.data["id"])
-        elif event.data.get("kind") == "process":
+    def click_chart(event: events.GenericEventArguments) -> None:
+        data = event.args["data"]
+        if event.args["dataType"] == "edge":
+            choose_connection(data["id"])
+        elif data.get("kind") == "process":
             render(force=True)
 
     def click_row(event: events.GenericEventArguments) -> None:
@@ -286,7 +287,8 @@ def create_page(monitor: Monitor) -> None:
             choose_connection(event.selection[0]["id"])
 
     selector.on_value_change(choose_process)
-    chart.on_point_click(click_chart)
+    # Graph items need no numeric value; avoid the point-click wrapper's required value field.
+    chart.on("chart:click", click_chart, ["dataType", "data"])
     table.on("rowClick", click_row)
     table.on_select(select_row)
     ui.timer(0.5, render)
