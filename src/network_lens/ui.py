@@ -168,7 +168,7 @@ def create_page(monitor: Monitor) -> None:
             pid = connection.pid if connection.pid is not None else "不可读"
             options[key] = f"{connection.process_name} · PID {pid} · {len(group)} 条"
         if selected_process in options:
-            selected_label = options[selected_process]
+            selected_label = options[selected_process].rsplit(" · ", 1)[0]
         elif selected_process is not None:
             options[selected_process] = f"{selected_label}（本次无连接）"
         # Avoid resetting a user's in-progress search while the list is open.
@@ -260,7 +260,7 @@ def create_page(monitor: Monitor) -> None:
     def choose_process(event: events.ValueChangeEventArguments) -> None:
         nonlocal selected_process, selected_connection, selected_label
         selected_process = event.value
-        selected_label = selector.options.get(selected_process, "")
+        selected_label = selector.options.get(selected_process, "").rsplit(" · ", 1)[0]
         selected_connection = None
         render(force=True)
 

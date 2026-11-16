@@ -80,6 +80,7 @@ def test_page_selection_details_failure_recovery_and_process_disappearance(caplo
             await user.should_see("以下保留最近观察详情。")
             assert selector.value == process_id(connection.process)
             assert table.rows == []
+            assert selector.options[selector.value] == "example.exe · PID 42（本次无连接）"
             assert chart.options["series"][0]["links"] == []
 
             reused = replace(connection, process_started_at=5678.9)
