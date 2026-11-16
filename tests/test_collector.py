@@ -88,6 +88,17 @@ def test_missing_pid_is_explicit_without_process_lookup(monkeypatch):
     assert snapshot.warnings
 
 
+def test_zero_pid_is_preserved_without_attributing_socket_to_idle_process(monkeypatch):
+    factory = Mock()
+    monkeypatch.setattr(psutil, "net_connections", Mock(return_value=[raw_connection(pid=0)]))
+    monkeypatch.setattr(psutil, "Process", factory)
+    snapshot = collect_snapshot()
+    factory.assert_not_called()
+    assert snapshot.connections[0].pid == 0
+    assert snapshot.connections[0].process_name == "Unknown"
+    assert snapshot.connections[0].process_started_at is None
+
+
 @pytest.mark.parametrize("error", [psutil.AccessDenied(), OSError("table unavailable")])
 def test_table_failure_returns_failed_snapshot(monkeypatch, error):
     monkeypatch.setattr(psutil, "net_connections", Mock(side_effect=error))

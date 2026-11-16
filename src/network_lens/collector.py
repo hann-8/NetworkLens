@@ -11,6 +11,8 @@ from .models import Connection, Endpoint, Snapshot
 def _process_info(pid: int | None) -> tuple[str, float | None, str | None]:
     if pid is None:
         return "Unknown", None, "部分连接的 PID 不可读；无法确定所属进程。"
+    if pid == 0:
+        return "Unknown", None, "系统返回 PID 0 的记录保留原值，不将它关联到空闲进程。"
     try:
         process = psutil.Process(pid)
     except (psutil.Error, OSError) as exc:
